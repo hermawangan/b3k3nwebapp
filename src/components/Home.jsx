@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { fetchCategory } from "../redux";
+import { fetchCategory, getId } from "../redux";
 import { connect } from "react-redux";
 import SearchBooks from "./SearchBooks";
 
-function Home({ categories, loadingCat, fetchCategories }) {
+function Home({ categories, loadingCat, fetchCategories, id, getId }) {
   const [search, setSearch] = useState("");
-  const [id, setId] = useState();
+  const [catId, setCatId] = useState(1);
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+    getId(catId);
+  }, [catId]);
+
   const idHandler = (e) => {
-    setId(e.target.id);
+    setCatId(e.target.id);
   };
-  console.log(id);
+
   return (
     <div>
       <div>
@@ -49,12 +51,14 @@ const mapStateToProps = (state) => {
   return {
     categories: state.categories.categories,
     loadingCat: state.categories.loading,
+    id: state.id.id,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchCategories: () => dispatch(fetchCategory()),
+    getId: (id) => dispatch(getId(id)),
   };
 };
 
