@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Nav from "./components/Nav";
+import BooksComponent from "./components/BooksComponent";
 
 function App() {
   return (
@@ -13,7 +14,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Nav />}>
               <Route index element={<LoginPage />} />
-              <Route path="home" element={<Home />} />
+              <Route path="home">
+                <Route index element={<Home />} />
+                <Route path="books" element={<BooksComponent />} />
+              </Route>
             </Route>
           </Routes>
         </Router>
