@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { fetchCategory, getId } from "../redux";
 import { connect } from "react-redux";
 import SearchBooks from "./SearchBooks";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Home({ categories, loadingCat, fetchCategories, id, getId }) {
   const [search, setSearch] = useState("");
-  const [catId, setCatId] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
-    getId(catId);
-  }, [catId]);
+  }, []);
 
   const idHandler = (e) => {
-    setCatId(e.target.id);
+    getId(e.target.id);
+    navigate("/books");
   };
 
   return (
@@ -36,11 +36,9 @@ function Home({ categories, loadingCat, fetchCategories, id, getId }) {
           {categories.map((category) => {
             return (
               <div key={category.id}>
-                <Link to="/home/books">
-                  <p id={category.id} onClick={idHandler}>
-                    {category.name}
-                  </p>
-                </Link>
+                <p id={category.id} onClick={idHandler}>
+                  {category.name}
+                </p>
               </div>
             );
           })}
