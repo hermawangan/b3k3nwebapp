@@ -14,10 +14,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Nav />}>
               <Route index element={<LoginPage />} />
-              <Route path="home">
-                <Route index element={<Home />} />
-                <Route path="books" element={<BooksComponent />} />
-              </Route>
+              <Route path="home" element={<Home />} />
+              <Route path="books" element={<BooksComponent />} />
             </Route>
           </Routes>
         </Router>
