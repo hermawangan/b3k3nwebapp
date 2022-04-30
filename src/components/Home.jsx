@@ -36,7 +36,7 @@ function Home({ categories, loadingCat, fetchCategories, id, getId }) {
           {categories.map((category) => {
             return (
               <div key={category.id}>
-                <Link to="books">
+                <Link to="/home/books">
                   <p id={category.id} onClick={idHandler}>
                     {category.name}
                   </p>
