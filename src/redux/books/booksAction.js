@@ -27,7 +27,6 @@ const fetchBooksFail = (error) => {
 
 export const fetchBooks = (id = 1, page) => {
   return (dispatch) => {
-    console.log(page + 1);
     dispatch(fetchBooksReq);
     axios
       .get(
