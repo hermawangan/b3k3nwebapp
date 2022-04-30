@@ -25,11 +25,16 @@ const fetchBooksFail = (error) => {
   };
 };
 
-export const fetchBooks = () => {
+export const fetchBooks = (id = 1, page) => {
   return (dispatch) => {
+    console.log(page + 1);
     dispatch(fetchBooksReq);
     axios
-      .get("fee-assessment-books/?categoryId=1")
+      .get(
+        `fee-assessment-books/?categoryId=${id}&${
+          page !== undefined ? `page=${page}` : ""
+        }`
+      )
       .then((response) => {
         const data = response.data;
         dispatch(fetchBooksSuccess(data));
