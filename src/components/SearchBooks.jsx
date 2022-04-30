@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { fetchBooks } from "../redux";
 
-function SearchBooks({ books, laoding, fetchBooks, search }) {
+function SearchBooks({ books, loading, fetchBooks, search }) {
   useEffect(() => {
     fetchBooks();
   }, []);
@@ -18,14 +18,18 @@ function SearchBooks({ books, laoding, fetchBooks, search }) {
   return (
     <div>
       <ul>
-        {filteredBooks.map((book) => {
-          return (
-            <li key={book.id}>
-              Title: <span>{book.title}</span>
-              Name : <span>{book.authors[0]}</span>
-            </li>
-          );
-        })}
+        {loading ? (
+          <p>Loading, please Wait</p>
+        ) : (
+          filteredBooks.map((book) => {
+            return (
+              <li key={book.id}>
+                Title: <span>{book.title}</span>
+                Name : <span>{book.authors[0]}</span>
+              </li>
+            );
+          })
+        )}
       </ul>
     </div>
   );
