@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Nav from "./components/Nav";
 import BooksComponent from "./components/BooksComponent";
+import Bookmarks from "./components/Bookmarks";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <Route index element={<LoginPage />} />
               <Route path="home" element={<Home />} />
               <Route path="books" element={<BooksComponent />} />
+              <Route path="bookmark" element={<Bookmarks />} />
             </Route>
           </Routes>
         </Router>
