@@ -16,6 +16,8 @@ const booksReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        books: [],
+        errorMsg: ''
       };
 
     case FETCH_BOOKS_SUCCESS:
