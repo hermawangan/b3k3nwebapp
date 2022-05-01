@@ -1,13 +1,18 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchBooks } from "../redux";
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 
 function BooksComponent({ books, loading, fetchBooks, id }) {
   const [pagination, setPagination] = useState(0);
+  const [favourites, setFavourites] = useState([]);
+  const getArray = JSON.parse(localStorage.getItem("favorites") || "0");
 
   useEffect(() => {
     fetchBooks(id, pagination);
+    if (getArray !== 0) {
+      setFavourites([...getArray]);
+    }
   }, []);
 
   const nextButton = () => {
@@ -17,6 +22,7 @@ function BooksComponent({ books, loading, fetchBooks, id }) {
       setPagination(pagination + 1);
     }
     fetchBooks(id, pagination + 1);
+    console.log(books.length);
   };
 
   const prevButton = () => {
@@ -26,6 +32,30 @@ function BooksComponent({ books, loading, fetchBooks, id }) {
       setPagination(pagination - 1);
     }
     fetchBooks(id, pagination - 1);
+  };
+
+  const addFav = (items, id) => {
+    let array = favourites;
+    let addAray = true;
+
+    array.map((item, key) => {
+      if (item === id) {
+        array.splice(key, 1);
+        addAray = false;
+      }
+    });
+    if (addAray) {
+      array.push(id);
+    }
+    setFavourites([...array]);
+    localStorage.setItem("favorites", JSON.stringify(favourites));
+
+    let storage = localStorage.getItem("favBook" + id || "0");
+    if (storage === null) {
+      localStorage.setItem("favBook" + id, JSON.stringify(items));
+    } else {
+      localStorage.removeItem("favBook" + id);
+    }
   };
 
   return (
@@ -38,6 +68,12 @@ function BooksComponent({ books, loading, fetchBooks, id }) {
             <div key={book.id}>
               <p>{book.title}</p>
               <p>{book.authors[0]}</p>
+
+              {favourites.includes(book.id) ? (
+                <IoIosHeart onClick={() => addFav(book, book.id)} />
+              ) : (
+                <IoIosHeartEmpty onClick={() => addFav(book, book.id)} />
+              )}
             </div>
           );
         })
@@ -47,7 +83,7 @@ function BooksComponent({ books, loading, fetchBooks, id }) {
           <span onClick={prevButton}>Prev {pagination}</span>
         )}
         <p>{pagination + 1}</p>
-        {pagination === 10 ? null : (
+        {pagination >= books.length ? null : (
           <span onClick={nextButton}>next {pagination + 2}</span>
         )}
       </div>
@@ -67,5 +103,6 @@ const mapDispatchToProps = (dispatch) => {
     fetchBooks: (id, pagination) => dispatch(fetchBooks(id, pagination)),
   };
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(BooksComponent);
