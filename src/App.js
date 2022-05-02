@@ -10,7 +10,7 @@ import Bookmarks from "./components/Bookmarks";
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
+      <div className="w-full ">
         <Router>
           <Routes>
             <Route path="/" element={<Nav />}>

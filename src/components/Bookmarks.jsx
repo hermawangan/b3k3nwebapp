@@ -37,21 +37,35 @@ function Bookmarks() {
       {favBooks.length === 0 ? (
         <p>No favorite books</p>
       ) : (
-        favBooks.map((favBook) => {
-          return (
-            <div key={favBook.id}>
-              <img src={favBook.cover_url} alt="cover book" />
-              <div>
-                <p>{favBook.title}</p>
-                <p>{favBook.authors[0]}</p>
-                <p>{favBook.description}</p>
-                <span>{favBook.sections.length}</span>
+        <div className="grid grid-cols-1 gap-7 m-5 place-items-center md:place-content-center md:place-items-start  md:grid-cols-2 lg:grid-cols-3 w-11/12">
+          {favBooks.map((favBook) => {
+            return (
+              <div
+                key={favBook.id}
+                className="border-[1px] border-gray-300 shadow-md rounded-md"
+              >
+                <img
+                  src={favBook.cover_url}
+                  alt="cover book"
+                  className="w-full rounded-md h-80"
+                />
+                <div className="p-5">
+                  <p className="text-xl font-bold">{favBook.title}</p>
+                  <p className="text-lg font-semibold">{favBook.authors[0]}</p>
+                  <p className="pt-5">{favBook.description}</p>
+                  <div className="flex justify-between items-center pt-5">
+                    <p>Sections: {favBook.sections.length}</p>
+                    <IoMdTrash
+                      id={favBook.id}
+                      onClick={clickHandler}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
               </div>
-
-              <IoMdTrash id={favBook.id} onClick={clickHandler} />
-            </div>
-          );
-        })
+            );
+          })}
+        </div>
       )}
     </div>
   );

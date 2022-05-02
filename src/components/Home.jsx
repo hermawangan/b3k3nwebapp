@@ -22,8 +22,8 @@ function Home({ categories, loadingCat, fetchCategories, id, getId }) {
   };
 
   return (
-    <div className="border-2 border-red-700 flex flex-col mt-10 h-[80vh] items-center">
-      <div className="border-2 border-green-800 w-11/12 py-10 md:w-3/4 md:mt-20 lg:w-1/2">
+    <div className=" flex flex-col mt-10 h-[80vh] items-center">
+      <div className=" w-11/12 py-10 md:w-3/4 md:mt-20 lg:w-1/2">
         <input
           type="text"
           placeholder="Search books title and author"

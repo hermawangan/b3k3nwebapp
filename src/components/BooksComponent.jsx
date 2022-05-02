@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { fetchBooks } from "../redux";
-import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
+import {
+  IoIosHeart,
+  IoIosHeartEmpty,
+  IoIosArrowBack,
+  IoIosArrowForward,
+} from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
-function BooksComponent({ books, loading, fetchBooks, id }) {
+function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
   const [pagination, setPagination] = useState(0);
   const [favourites, setFavourites] = useState([]);
+  const navigate = useNavigate();
   const getArray = JSON.parse(localStorage.getItem("favorites") || "0");
 
   useEffect(() => {
+    console.log(books);
     fetchBooks(id, pagination);
     if (getArray !== 0) {
       setFavourites([...getArray]);
@@ -22,7 +30,6 @@ function BooksComponent({ books, loading, fetchBooks, id }) {
       setPagination(pagination + 1);
     }
     fetchBooks(id, pagination + 1);
-    console.log(books.length);
   };
 
   const prevButton = () => {
@@ -58,35 +65,83 @@ function BooksComponent({ books, loading, fetchBooks, id }) {
     }
   };
 
+  const clickHandler = () => {
+    navigate(-1);
+  };
+
   return (
-    <div>
+    <div className="flex items-center flex-col">
       {loading ? (
         <p>please wait</p>
+      ) : errorMsg !== "" ? (
+        <div>
+          <p onClick={clickHandler}>
+            {" "}
+            <IoIosArrowBack /> Go back{" "}
+          </p>
+          <p>{errorMsg}</p>
+        </div>
       ) : (
-        books.map((book) => {
-          return (
-            <div key={book.id}>
-              <p>{book.title}</p>
-              <p>{book.authors[0]}</p>
+        <div className="grid grid-cols-1 gap-7 m-5 place-items-center md:place-content-center md:place-items-start  md:grid-cols-2 lg:grid-cols-3 w-11/12">
+          {books.map((book) => {
+            return (
+              <div
+                key={book.id}
+                className="border-[1px] border-gray-300 shadow-md rounded-md "
+              >
+                <img
+                  src={book.cover_url}
+                  alt="book cover"
+                  className="w-full rounded-md h-80"
+                />
+                <div className="p-5">
+                  <p className="text-xl font-bold">{book.title}</p>
+                  <p className="text-lg font-semibold">{book.authors[0]}</p>
+                  <p className="pt-5">{book.description}</p>
+                  <div className="flex justify-between items-center pt-5">
+                    <p>Sections: {book.sections.length}</p>
 
-              {favourites.includes(book.id) ? (
-                <IoIosHeart onClick={() => addFav(book, book.id)} />
-              ) : (
-                <IoIosHeartEmpty onClick={() => addFav(book, book.id)} />
-              )}
-            </div>
-          );
-        })
+                    {favourites.includes(book.id) ? (
+                      <IoIosHeart
+                        onClick={() => addFav(book, book.id)}
+                        className="text-red-700 cursor-pointer text-xl"
+                      />
+                    ) : (
+                      <IoIosHeartEmpty
+                        onClick={() => addFav(book, book.id)}
+                        className="text-red-700 cursor-pointer text-xl"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
-      <div>
-        {pagination === 0 ? null : (
-          <span onClick={prevButton}>Prev {pagination}</span>
-        )}
-        <p>{pagination + 1}</p>
-        {pagination >= books.length ? null : (
-          <span onClick={nextButton}>next {pagination + 2}</span>
-        )}
-      </div>
+      {loading ? null : errorMsg !== "" ? null : (
+        <div className=" flex justify-center items-center mb-5 md:text-xl lg:justify-end lg:text-2xl  w-full">
+          {pagination === 0 ? null : (
+            <span
+              onClick={prevButton}
+              className="flex items-center cursor-pointer"
+            >
+              {" "}
+              {pagination} <IoIosArrowBack />{" "}
+            </span>
+          )}
+          <p className="mx-10">{pagination + 1}</p>
+          {pagination >= books.length ? null : (
+            <span
+              onClick={nextButton}
+              className="flex items-center lg:mr-16 cursor-pointer"
+            >
+              {" "}
+              <IoIosArrowForward /> {pagination + 2}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -95,6 +150,7 @@ const mapStateToProps = (state) => {
     books: state.books.books,
     loading: state.books.loading,
     id: state.id.id,
+    errorMsg: state.books.errorMsg,
   };
 };
 
@@ -103,6 +159,5 @@ const mapDispatchToProps = (dispatch) => {
     fetchBooks: (id, pagination) => dispatch(fetchBooks(id, pagination)),
   };
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(BooksComponent);

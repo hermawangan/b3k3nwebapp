@@ -16,7 +16,7 @@ function SearchBooks({ books, fetchBooks, search }) {
         );
 
   return (
-    <div className="absolute h-52 left-[4.5%] w-11/12 bg-white border-2  border-gray-800 overflow-auto rounded-t-sm rounded-b-lg md:w-3/4 md:left-[12.5%] md:h-60 lg:w-1/2 lg:left-[25%]">
+    <div className="absolute h-52 left-[4.5%] w-11/12 bg-white border-2  border-gray-800 overflow-auto  rounded-sm md:w-3/4 md:left-[12.5%] md:h-60 lg:w-1/2 lg:left-[25%]">
       <ul className="">
         {filteredBooks.map((book) => {
           return (

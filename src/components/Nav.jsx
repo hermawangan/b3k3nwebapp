@@ -14,7 +14,7 @@ function Nav() {
           pattern.test(location.pathname)
             ? " justify-between "
             : "justify-center"
-        } flex items-center  m-5  md:mx-10 lg:mx-24`}
+        } flex items-center  m-7 md:mx-10 lg:mx-24 `}
       >
         <Link to="/">
           <span className="font-bold text-3xl lg:text-4xl">B3K3N</span>
