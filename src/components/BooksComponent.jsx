@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";
 import { fetchBooks } from "../redux";
-import { IoIosHeart, IoIosHeartEmpty, IoIosArrowBack } from "react-icons/io";
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { FaSpinner } from "react-icons/fa";
 import Pagination from "./Pagination";
 
