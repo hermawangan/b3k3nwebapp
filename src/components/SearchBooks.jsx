@@ -6,7 +6,6 @@ function SearchBooks({ search }) {
   const [books, setBooks] = useState([]);
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(true);
-  const [searchResult, setSearchResult] = useState(false);
 
   useEffect(() => {
     axios
