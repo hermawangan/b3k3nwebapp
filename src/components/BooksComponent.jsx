@@ -1,45 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";
 import { fetchBooks } from "../redux";
-import {
-  IoIosHeart,
-  IoIosHeartEmpty,
-  IoIosArrowBack,
-  IoIosArrowForward,
-} from "react-icons/io";
+import { IoIosHeart, IoIosHeartEmpty, IoIosArrowBack } from "react-icons/io";
+import Pagination from "./Pagination";
 import { useNavigate } from "react-router-dom";
 
+let pageSize = 10;
+
 function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
-  const [pagination, setPagination] = useState(0);
+  const [currentPage, setcurrentPage] = useState(1);
   const [favourites, setFavourites] = useState([]);
   const navigate = useNavigate();
   const getArray = JSON.parse(localStorage.getItem("favorites") || "0");
 
   useEffect(() => {
-    console.log(books);
-    fetchBooks(id, pagination);
+    fetchBooks(id);
+
     if (getArray !== 0) {
       setFavourites([...getArray]);
     }
   }, []);
 
-  const nextButton = () => {
-    if (pagination === books.length) {
-      return pagination;
-    } else {
-      setPagination(pagination + 1);
-    }
-    fetchBooks(id, pagination + 1);
-  };
+  const currentBooksData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * pageSize;
+    const lastPageIndex = firstPageIndex + pageSize;
+    const currentBooks = loading
+      ? []
+      : books.slice(firstPageIndex, lastPageIndex);
 
-  const prevButton = () => {
-    if (pagination === 0) {
-      return pagination;
-    } else {
-      setPagination(pagination - 1);
-    }
-    fetchBooks(id, pagination - 1);
-  };
+    return currentBooks;
+  }, [currentPage, loading]);
 
   const addFav = (items, id) => {
     let array = favourites;
@@ -83,7 +73,7 @@ function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-7 m-5 place-items-center md:place-content-center md:place-items-start  md:grid-cols-2 lg:grid-cols-3 w-11/12">
-          {books.map((book) => {
+          {currentBooksData.map((book) => {
             return (
               <div
                 key={book.id}
@@ -119,29 +109,13 @@ function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
           })}
         </div>
       )}
-      {loading ? null : errorMsg !== "" ? null : (
-        <div className=" flex justify-center items-center mb-5 md:text-xl lg:justify-end lg:text-2xl  w-full">
-          {pagination === 0 ? null : (
-            <span
-              onClick={prevButton}
-              className="flex items-center cursor-pointer"
-            >
-              {" "}
-              {pagination} <IoIosArrowBack />{" "}
-            </span>
-          )}
-          <p className="mx-10">{pagination + 1}</p>
-          {pagination >= books.length ? null : (
-            <span
-              onClick={nextButton}
-              className="flex items-center lg:mr-16 cursor-pointer"
-            >
-              {" "}
-              <IoIosArrowForward /> {pagination + 2}
-            </span>
-          )}
-        </div>
-      )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalCount={books.length}
+        pageSize={pageSize}
+        onPageChange={(page) => setcurrentPage(page)}
+      />
     </div>
   );
 }
