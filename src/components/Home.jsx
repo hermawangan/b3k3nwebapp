@@ -42,7 +42,7 @@ function Home({ categories, loadingCat, fetchCategories, getId, errorMsg }) {
         </div>
       ) : errorMsg !== "" ? (
         <div className="text-center text-xl">
-          <p>{errorMsg} Test</p>
+          <p>{errorMsg}</p>
           <p>Please Reload the page</p>
         </div>
       ) : (
