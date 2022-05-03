@@ -3,8 +3,9 @@ import { fetchCategory, getId } from "../redux";
 import { connect } from "react-redux";
 import SearchBooks from "./SearchBooks";
 import { useNavigate } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 
-function Home({ categories, loadingCat, fetchCategories, id, getId }) {
+function Home({ categories, loadingCat, fetchCategories, getId, errorMsg }) {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -35,7 +36,15 @@ function Home({ categories, loadingCat, fetchCategories, id, getId }) {
       </div>
 
       {loadingCat ? (
-        <p>Loading, please Wait</p>
+        <div className="flex items-center">
+          <FaSpinner className="animate-spin" />
+          <p className="text-xl font-semibold pl-5">Loading, please wait...</p>
+        </div>
+      ) : errorMsg !== "" ? (
+        <div className="text-center text-xl">
+          <p>{errorMsg} Test</p>
+          <p>Please Reload the page</p>
+        </div>
       ) : (
         <>
           <h3 className="text-base mt-5  font-bold md:text-lg md:mt-10">
@@ -66,7 +75,7 @@ const mapStateToProps = (state) => {
   return {
     categories: state.categories.categories,
     loadingCat: state.categories.loading,
-    id: state.id.id,
+    errorMsg: state.categories.errorMsg,
   };
 };
 
