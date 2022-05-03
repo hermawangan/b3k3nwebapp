@@ -2,15 +2,14 @@ import React, { useEffect, useState, useMemo } from "react";
 import { connect } from "react-redux";
 import { fetchBooks } from "../redux";
 import { IoIosHeart, IoIosHeartEmpty, IoIosArrowBack } from "react-icons/io";
+import { FaSpinner } from "react-icons/fa";
 import Pagination from "./Pagination";
-import { useNavigate } from "react-router-dom";
 
 let pageSize = 10;
 
 function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
   const [currentPage, setcurrentPage] = useState(1);
   const [favourites, setFavourites] = useState([]);
-  const navigate = useNavigate();
   const getArray = JSON.parse(localStorage.getItem("favorites") || "0");
 
   useEffect(() => {
@@ -55,21 +54,17 @@ function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
     }
   };
 
-  const clickHandler = () => {
-    navigate(-1);
-  };
-
   return (
     <div className="flex items-center flex-col">
       {loading ? (
-        <p>please wait</p>
+        <div className="flex items-center">
+          <FaSpinner className="animate-spin" />
+          <p className="text-xl font-semibold pl-5">Loading, please wait...</p>
+        </div>
       ) : errorMsg !== "" ? (
-        <div>
-          <p onClick={clickHandler}>
-            {" "}
-            <IoIosArrowBack /> Go back{" "}
-          </p>
-          <p>{errorMsg}</p>
+        <div className="text-center text-xl">
+          <p>{errorMsg} Test</p>
+          <p>Please Reload the page</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-7 m-5 place-items-center md:place-content-center md:place-items-start  md:grid-cols-2 lg:grid-cols-3 w-11/12">
@@ -109,13 +104,14 @@ function BooksComponent({ books, loading, fetchBooks, id, errorMsg }) {
           })}
         </div>
       )}
-
-      <Pagination
-        currentPage={currentPage}
-        totalCount={books.length}
-        pageSize={pageSize}
-        onPageChange={(page) => setcurrentPage(page)}
-      />
+      {loading ? null : errorMsg !== "" ? null : (
+        <Pagination
+          currentPage={currentPage}
+          totalCount={books.length}
+          pageSize={pageSize}
+          onPageChange={(page) => setcurrentPage(page)}
+        />
+      )}
     </div>
   );
 }
